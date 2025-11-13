@@ -75,28 +75,8 @@ def loopjogo(janela, mouse, gm1, teclado, PLAY, MENU, RANKING):
             MENU = True
             RANKING = False
             return PLAY, MENU, RANKING
-            
-        jogador.no_chao = False 
-        margem_de_colisao = 15 
 
-        for p in lista_plataformas:
-            colidiu = True
-            if ( (jogador.x + jogador.width) < p.x or
-                  jogador.x > (p.x + p.width) or
-                  (jogador.y + jogador.height) < p.y or
-                  jogador.y > (p.y + p.height) ):
-                colidiu = False
-            
-            if colidiu:
-                if (jogador.velocidade_y >= 0) and abs((jogador.y + jogador.height) - p.y) < margem_de_colisao:
-                    jogador.y = p.y - jogador.height 
-                    jogador.velocidade_y = 0      
-                    jogador.no_chao = True        
-                    break 
-                if (jogador.velocidade_y < 0) and abs(jogador.y - (p.y + p.height)) < margem_de_colisao:
-                    jogador.y = p.y + p.height
-                    jogador.velocidade_y = 0 
-                    break 
+        jogador.jogador_plataformas(lista_plataformas)
                     
         # Ordem: Jogador primeiro, Câmera depois
         jogador.atualizar(janela, teclado)
