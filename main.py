@@ -8,7 +8,6 @@ from PPlay.sprite import *
 from PPlay.window import *
 from PPlay.gameobject import *
 from PPlay.gameimage import *
-import random
 
 from menu import gamemenu
 from loopjogo import loopjogo

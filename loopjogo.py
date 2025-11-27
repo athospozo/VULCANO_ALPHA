@@ -1,5 +1,4 @@
 # Em: biblioteca/loopjogo.py
-
 import pygame 
 import random 
 from PPlay.keyboard import *
@@ -12,12 +11,12 @@ from PPlay.gameimage import *
 from personagem import Personagem
 from lava import lava
 from camera import Camera
-from plataforma import Plataforma
+from plataforma import *
 
 def loopjogo(janela, mouse, gm1, teclado, PLAY, MENU, RANKING):
     
-    medida = 0
-    contador = 0
+    contador = 100
+    fps = 0
     camera = Camera(janela)
     camera.scroll_limit_tela = janela.height * 0.33 
 
@@ -25,60 +24,46 @@ def loopjogo(janela, mouse, gm1, teclado, PLAY, MENU, RANKING):
     altura_plat = 87
     pos_y_plataforma = janela.height / 2 + 150 
     
-    plataforma_inicial = Plataforma(
+    gerenciador_plat = Plataforma(
         imagem_path='ARTES/plataforma1.png',
         x_centro=janela.width / 2,
         y_pos=pos_y_plataforma,
         largura=largura_plat,
-        altura=altura_plat
+        altura=altura_plat,
+        janela=janela
     )
     
     altura_jogador = 80
     largura_jogador = 60
     pos_x_jogador = janela.width / 2
-    pos_y_jogador = plataforma_inicial.y
+    pos_y_jogador = gerenciador_plat.y
     
     jogador = Personagem(
         xinicial=pos_x_jogador,
         yinicial=pos_y_jogador,
         altura=altura_jogador,
-        largura=largura_jogador
+        largura=largura_jogador,
+        plataforma1=gerenciador_plat.lista[0]
     )
     jogador.no_chao = True 
     
     obstaculo = lava(jogador, janela)
-    lista_plataformas = [plataforma_inicial]
-    
-    ultima_y = plataforma_inicial.y 
-    min_gap_vertical = 100
-    max_gap_vertical = 150
-
-    for _ in range(15):
-        novo_x_centro = random.randint(janela.width//4, janela.width - janela.width//4 -20)
-        gap_vertical = random.randint(min_gap_vertical, max_gap_vertical)
-        novo_y = ultima_y - gap_vertical - plataforma_inicial.height
-        nova_plat = Plataforma(
-            imagem_path='ARTES/plataforma1.png',
-            x_centro=novo_x_centro,
-            y_pos=novo_y,
-            largura=largura_plat,
-            altura=altura_plat
-        )
-        lista_plataformas.append(nova_plat)
-        ultima_y = novo_y
         
     while PLAY:
-        
         contador += 1
+
         if teclado.key_pressed("ESC"):
             PLAY = False
             MENU = True
             RANKING = False
             return PLAY, MENU, RANKING
-
-        jogador.jogador_plataformas(lista_plataformas)
-                    
+        
+        #plataformas
+        gerenciador_plat.criacao_plataformas(janela)
+        gerenciador_plat.remocao_plataformas(janela)
+    
         # Ordem: Jogador primeiro, Câmera depois
+        jogador.jogador_plataformas(gerenciador_plat.lista)
         jogador.atualizar(janela, teclado)
         obstaculo.atualizar()
 
@@ -89,23 +74,23 @@ def loopjogo(janela, mouse, gm1, teclado, PLAY, MENU, RANKING):
             PLAY = False
             MENU = True
             RANKING = False
-            return PLAY, MENU, RANKING 
-            
-        # Desenho
-        janela.set_background_color([0, 0, 0])
-        gm1.draw() 
+            return PLAY, MENU, RANKING
         
-        print (contador)
+        gm1.draw() 
 
-        for p in lista_plataformas:
-            if contador % 5 == 0:
-                medida = camera.atualizar(jogador)
-                p.y = p.y - medida
-            p.draw()
-            
+        #FPS
+        if contador % 100 == 0:
+            dt = janela.delta_time()
+            if dt > 0:
+                fps = 1 / dt
+            else:
+                fps = 0
+        janela.draw_text(f"FPS: {int(fps)}", 10, 10, size=20, color=(255, 255, 255))
+
+        # Desenho
+        gerenciador_plat.desenhar_plataformas(camera)
         jogador.desenhar(camera)
         obstaculo.desenhar()
-        
         janela.update()
         
     return PLAY, MENU, RANKING

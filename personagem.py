@@ -7,7 +7,7 @@ from PPlay.sprite import *
 from PPlay.keyboard import *
 
 class Personagem:
-    def __init__(self, xinicial, yinicial, altura, largura):
+    def __init__(self, xinicial, yinicial, altura, largura, plataforma1):
 
         #gerando os sprites
         self.anim_parado = Animation("ARTES/parado.png", 2)
@@ -34,8 +34,8 @@ class Personagem:
 
         #definicoes basicas
         self.agora = self.anim_parado
-        self.x = xinicial - self.width/2
-        self.y = yinicial - self.height 
+        self.x = plataforma1.x + plataforma1.width / 2 - self.width / 2
+        self.y = plataforma1.y - plataforma1.height*2
 
         #fisica do movimento
         self.velocidade_horizontal = 200
