@@ -84,6 +84,6 @@ class Plataforma:
     def desenhar_plataformas (self, personagem):
         for plataforma in self.lista:
             if (personagem.subindo):
-                plataforma.y = plataforma.y - (personagem.velocidade_vertical*0.95)*self.janela.delta_time()
+                plataforma.y = plataforma.y - personagem.velocidade_vertical*self.janela.delta_time()
             plataforma.set_position(plataforma.x, plataforma.y)
             plataforma.draw()

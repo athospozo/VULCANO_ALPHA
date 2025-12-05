@@ -40,11 +40,11 @@ class lava:
 
         #caso de o jogador estar parado:
         if (jogador.subindo == False):
-            self.y -= self.velocidade/2*self.janela.delta_time()
+            self.y -= self.velocidade*self.janela.delta_time()
         
         #caso de o jogador estar pulando
         else:
-            self.y += self.velocidade*2*self.janela.delta_time()
+            self.y += self.velocidade*3*self.janela.delta_time()
         
     def desenhar(self): 
         self.sprite_lava.set_position(self.x, self.y)
