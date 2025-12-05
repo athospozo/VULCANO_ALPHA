@@ -1,13 +1,5 @@
-# Em: biblioteca/menu.py
-
-from PPlay.keyboard import *
-from PPlay.collision import *
 from PPlay.mouse import *
-from PPlay.sprite import *
-from PPlay.window import *
 from PPlay.gameobject import *
-from PPlay.gameimage import *
-import random
 
 def gamemenu(janela, mouse, menu, PLAY,MENU,RANKING):
     

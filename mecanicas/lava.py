@@ -1,6 +1,4 @@
 import pygame 
-from PPlay.keyboard import *
-from PPlay.sprite import *
 from PPlay.animation import *
 
 class lava:
@@ -40,11 +38,11 @@ class lava:
 
         #caso de o jogador estar parado:
         if (jogador.subindo == False):
-            self.y -= self.velocidade*self.janela.delta_time()
+            self.y -= self.velocidade*1*self.janela.delta_time()
         
         #caso de o jogador estar pulando
         else:
-            self.y += self.velocidade*3*self.janela.delta_time()
+            self.y += self.velocidade*4*self.janela.delta_time()
         
     def desenhar(self): 
         self.sprite_lava.set_position(self.x, self.y)

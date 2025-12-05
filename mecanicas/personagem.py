@@ -81,7 +81,7 @@ class Jogador:
         for plataforma in lista_plataformas:
 
             #primeiro vamos garantir que a plataformas esteja em uma margem necessaria para gastar processamento:
-            if ((plataforma.y >= self.y - self.janela.height/2) and
+            if ((plataforma.y >= -20) and
                 (plataforma.y + plataforma.height <= self.janela.height)):
                 
                 self.aux = self.colisao(plataforma)
