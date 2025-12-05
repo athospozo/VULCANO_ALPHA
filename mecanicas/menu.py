@@ -9,23 +9,28 @@ from PPlay.gameobject import *
 from PPlay.gameimage import *
 import random
 
-def gamemenu(janela, mouse, menu,  teclado , PLAY,MENU,RANKING):
+def gamemenu(janela, mouse, menu, PLAY,MENU,RANKING):
     
+    #botao play
     play = GameObject()
-    play.x = 634
-    play.y = 573
-    play.width = 1279 - 634
-    play.height = 651 - 573
+    play.x = janela.width * 0.3302
+    play.y = janela.height * 0.5305
+    play.width = janela.width * 0.3359
+    play.height = janela.height * 0.0722
+
+    #botal ranking
     ranking = GameObject()
-    ranking.x= play.x
-    ranking.y = 694
-    ranking.width = play.width
-    ranking.height = 762 - 694
+    ranking.x= janela.width * 0.3302
+    ranking.y = janela.height * 0.6426
+    ranking.width = janela.width * 0.3359
+    ranking.height = janela.height * 0.0630
+
+    #botao sair
     sair = GameObject()
-    sair.x = play.x
-    sair.y = 814
-    sair.width = play.width
-    sair.height = 891 - 814
+    sair.x = janela.width * 0.3302
+    sair.y = janela.height * 0.7537
+    sair.width = janela.width * 0.3359
+    sair.height = janela.height * 0.0713
     
     if mouse.is_over_object(play) and mouse.is_button_pressed(1):
         PLAY = True
