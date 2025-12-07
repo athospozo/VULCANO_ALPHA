@@ -9,7 +9,11 @@ def loopjogo(janela, mouse, gm1, teclado, PLAY, MENU, RANKING):
     jogador = Jogador(janela, gerenciador_plat.lista[0])
 
     obstaculo = lava(janela)
-        
+    
+    contador_frames = 0
+    tempo_acumulado = 0
+    fps_atual = 0
+
     while PLAY:
 
         if teclado.key_pressed("ESC"):
@@ -34,6 +38,21 @@ def loopjogo(janela, mouse, gm1, teclado, PLAY, MENU, RANKING):
         obstaculo.lava_jogador(jogador)
 
         gm1.draw() 
+
+
+        dt = janela.delta_time()
+        
+        # --- Lógica do Contador de FPS ---
+        tempo_acumulado += dt
+        contador_frames += 1
+        
+        # A cada 1 segundo, atualizamos o valor do FPS
+        if tempo_acumulado >= 1.0:
+            fps_atual = contador_frames
+            contador_frames = 0
+            tempo_acumulado = 0
+
+        #print (fps_atual)
 
         # Desenho
         gerenciador_plat.desenhar_plataformas(jogador)

@@ -42,17 +42,18 @@ class Jogador:
         self.y = plataforma1.y - plataforma1.height*2
 
         #fisica do movimento horizontal:
-        self.velocidade_horizontal = 200
+        self.velocidade_horizontal = self.janela.width/5
         self.no_chao = True
 
         #fisica do movimento vertical:
         self.velocidade_vertical = 0
-        self.gravidade = 5
-        self.forca_pulo = 1000
+        self.gravidade = self.janela.height*7
+        self.forca_pulo = self.janela.height*1.5
         self.jumping = False
 
         #variavel para propósitos externos à classe
         self.subindo = False
+        self.qnte_pulos = 0
 
     #definindo quando ha uma colisao de personagem com outro sprite:
     def colisao (self, possivel_colisao):
@@ -88,33 +89,38 @@ class Jogador:
 
                 #verificamos se é colisao por cima
                 if (self.aux == 1):
-                    self.y = plataforma.y - self.height
-                    self.velocidade_vertical = 0
-                    self.no_chao = True
-                    self.jumping = False
+                    if self.velocidade_vertical >= 0:
+                        self.y = plataforma.y - self.height
+                        self.velocidade_vertical = 0
+                        self.no_chao = True
+                        self.jumping = False
+                        #mesma verificacao na classe dads plataformas:
+                        if (self.qnte_pulos > 15):
+                            self.x += plataforma.vx * self.dt
 
                 #verificamos se é colisao por baixo
                 elif (self.aux == -1):
                     self.y = (plataforma.y + plataforma.height) + 10
                     self.no_chao = False
                     self.velocidade_vertical = 4
-                    if (self.jumping):
+                    if ((self.jumping) and (self.velocidade_vertical > 0)):
                         self.velocidade_vertical = 0
                     
     #definicao do funcionamento do pulo:
     def pulo (self):
-
+        
         #caso de haver pressionamento das teclas de pulo e o personagem nao estar pulando:
-        if (((self.teclado.key_pressed("SPACE")) or (self.teclado.key_pressed("W")) and (self.no_chao == True))
+        if (((self.teclado.key_pressed("SPACE")) or (self.teclado.key_pressed("W"))) and (self.no_chao == True)
             and (self.jumping == False)):
             self.jumping = True
             self.no_chao = False
             self.velocidade_vertical = -self.forca_pulo
+            self.qnte_pulos += 1
 
     #movimento horizontal do jogador:
     def mov (self):
         
-        self.velocidade_vertical += self.gravidade
+        self.velocidade_vertical += self.gravidade*self.dt
 
         #por padrao é parado:
         self.agora = self.anim_parado
