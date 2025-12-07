@@ -13,7 +13,7 @@ mouse = Mouse()
 teclado = Keyboard()
 
 janela_largura = 1000
-janela_altura = 500
+janela_altura = 700
 janela = Window(janela_largura, janela_altura)
 janela.set_title('VULCANO')
 
@@ -45,7 +45,7 @@ while True:
     
     elif PLAY:
         # Chama o loop do jogo e espera 4 valores de retorno (incluindo o tempo)
-        PLAY, MENU, RANKING, tempo_jogo = loopjogo(janela, mouse, gm1, teclado, PLAY, MENU, RANKING)
+        PLAY, MENU, RANKING, tempo_jogo = loopjogo(janela, gm1, teclado, PLAY, MENU, RANKING)
         
         # Se o tempo for maior que 0, significa que o jogador morreu
         if tempo_jogo > 0:

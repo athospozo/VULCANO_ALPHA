@@ -35,7 +35,7 @@ class Plataforma:
         self.gap = self.janela.height/4
 
         #para acrescentar uma certa dificuldade:
-        self.velocidade_base = self.janela.width/5
+        self.velocidade_base = self.janela.width/6
 
         #para inicializar o jogo
         self.apertou_espaco = False
@@ -46,9 +46,9 @@ class Plataforma:
 
         #distancia entre uma plataforma e outra
         gap_minimo = 10 
-        gap_maximo = int(self.width * 0.5) 
+        gap_maximo = int(self.width * 0.4) 
 
-        #lado direito ou esuqerdo
+        #lado direito ou esquerdo
         lado = random.choice([1, 2])
 
         #LADO ESQUERO:
@@ -74,7 +74,7 @@ class Plataforma:
                     return random.randint(inicio, fim)
 
         #caso nenhuma condicao seja satisfeita, tenta recursivamente (cuidado com recursão infinita, mas ok por enquanto)
-        return int(self.janela.width/2)
+        return (self.escolhe_x())
 
     def escolhe_y (self):
         ultima = self.lista[-1]

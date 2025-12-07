@@ -11,26 +11,16 @@ from PPlay.gameimage import *
 from mecanicas.personagem import Jogador
 from mecanicas.lava import lava
 from mecanicas.plataforma import *
-from mecanicas.camera import Camera
 
-def loopjogo(janela, mouse, gm1, teclado, PLAY, MENU, RANKING):
+def loopjogo(janela, gm1, teclado, PLAY, MENU, RANKING):
     # Inicia contagem de tempo
     inicio_tempo = time.time()
     tempo_final = 0
-
-    # Inicialização da Câmera
-    camera = Camera(janela)
-    camera.scroll_limit_tela = janela.height * 0.33 
     
     # Inicialização das Plataformas, Jogador e Obstáculo
     gerenciador_plat = Plataforma(janela)
     jogador = Jogador(janela, gerenciador_plat.lista[0])
     obstaculo = lava(janela)
-    
-    # Variáveis para FPS
-    contador_frames = 0
-    tempo_acumulado = 0
-    fps_atual = 0
 
     while PLAY:
 
@@ -62,16 +52,6 @@ def loopjogo(janela, mouse, gm1, teclado, PLAY, MENU, RANKING):
         
         # Desenha o Fundo
         gm1.draw() 
-
-        # Atualiza Delta Time e FPS
-        dt = janela.delta_time()
-        tempo_acumulado += dt
-        contador_frames += 1
-        
-        if tempo_acumulado >= 1.0:
-            fps_atual = contador_frames
-            contador_frames = 0
-            tempo_acumulado = 0
 
         # Desenho dos objetos
         # Passamos o jogador para o gerenciador desenhar as plataformas (scrolling)
