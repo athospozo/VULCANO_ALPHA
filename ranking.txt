@@ -1,2 +1,7 @@
 gab,19.49
 gabbb,44.92
+& C:/Users/raque/AppData/Local/Programs/Python/Python313/python.exe c:/Users/raque/VULCANO/VULCANO_ALPHA/main.py,2.54
+oii,5.70
+]gg,5.01
+gg,8.12
+gg,14.26

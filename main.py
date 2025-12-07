@@ -6,7 +6,6 @@ from PPlay.gameimage import *
 
 from mecanicas.menu import gamemenu
 from mecanicas.loopjogo import loopjogo
-# Importa a função de salvar_pontuacao também
 from mecanicas.ranking import ranking, salvar_pontuacao 
 
 pygame.init()
@@ -18,6 +17,7 @@ janela_altura = 500
 janela = Window(janela_largura, janela_altura)
 janela.set_title('VULCANO')
 
+# Carregamento das imagens de fundo (certifique-se que elas existem na pasta ARTES)
 gm1 = GameImage('ARTES/jogar1.png')
 menu_img = GameImage('ARTES/menu.png')
 ranking_img = GameImage('ARTES/menu.png') 
@@ -44,13 +44,17 @@ while True:
         PLAY, MENU, RANKING = gamemenu(janela, mouse, menu_img, PLAY, MENU, RANKING)
     
     elif PLAY:
-        # Agora recebe 4 valores (incluindo o tempo)
+        # Chama o loop do jogo e espera 4 valores de retorno (incluindo o tempo)
         PLAY, MENU, RANKING, tempo_jogo = loopjogo(janela, mouse, gm1, teclado, PLAY, MENU, RANKING)
         
-        # Se o tempo for maior que 0, significa que o jogador morreu e devemos salvar
+        # Se o tempo for maior que 0, significa que o jogador morreu
         if tempo_jogo > 0:
             print("\n" + "="*40)
             print(f"FIM DE JOGO! Você sobreviveu: {tempo_jogo:.2f} segundos.")
+            # Pequeno delay para não bugar o input do nome
+            janela.delay(500)
+            
+            # Nota: O input aqui é no terminal. Para input na janela seria necessário outra lógica.
             nome = input("Digite seu nome para o Ranking: ")
             
             if nome.strip() != "":

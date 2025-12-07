@@ -1,7 +1,7 @@
 from PPlay.mouse import *
 from PPlay.gameobject import *
 
-def gamemenu(janela, mouse, menu, PLAY,MENU,RANKING):
+def gamemenu(janela, mouse, menu, PLAY, MENU, RANKING):
     
     #botao play
     play = GameObject()
@@ -10,7 +10,7 @@ def gamemenu(janela, mouse, menu, PLAY,MENU,RANKING):
     play.width = janela.width * 0.3359
     play.height = janela.height * 0.0722
 
-    #botal ranking
+    #botao ranking
     ranking = GameObject()
     ranking.x= janela.width * 0.3302
     ranking.y = janela.height * 0.6426

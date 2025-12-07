@@ -1,6 +1,7 @@
 from PPlay.animation import *
 from PPlay.keyboard import *
 from PPlay.window import *
+import pygame
 
 class Jogador:
 
@@ -25,9 +26,9 @@ class Jogador:
 
         #vamos entao colocar os sprites de acordo com os tamanhos definidos:
         try:
-            self.anim_parado.image = pygame.transform.scale(self.anim_parado.image, (self.width * 2, self.height))
-            self.anim_esquerda.image = pygame.transform.scale(self.anim_esquerda.image, (self.width * 4, self.height))
-            self.anim_direita.image = pygame.transform.scale(self.anim_direita.image, (self.width * 4, self.height))
+            self.anim_parado.image = pygame.transform.scale(self.anim_parado.image, (int(self.width * 2), int(self.height)))
+            self.anim_esquerda.image = pygame.transform.scale(self.anim_esquerda.image, (int(self.width * 4), int(self.height)))
+            self.anim_direita.image = pygame.transform.scale(self.anim_direita.image, (int(self.width * 4), int(self.height)))
         except Exception as e:
             print(f"Erro ao redimensionar imagens do Personagem: {e}")
 
@@ -57,7 +58,6 @@ class Jogador:
 
     #definindo quando ha uma colisao de personagem com outro sprite:
     def colisao (self, possivel_colisao):
-
         #sobreposição no eixo x:
         if ((self.x <= possivel_colisao.x + possivel_colisao.width) and
             (self.x + self.width >= possivel_colisao.x)):
@@ -71,17 +71,12 @@ class Jogador:
             if ((self.y >= possivel_colisao.y + possivel_colisao.height/2) and
                 (self.y <= possivel_colisao.y + possivel_colisao.height)): 
                 return -1
+        return 0
             
     #definindo como o personagem interage com as plataformas:
     def personagem_plataformas (self, lista_plataformas):
-
-        #comecamos pela premissa que o jogador nao esta em contato com plataformas:
         self.no_chao = False
-
-        #vamos checar todas as plataformas
         for plataforma in lista_plataformas:
-
-            #primeiro vamos garantir que a plataformas esteja em uma margem necessaria para gastar processamento:
             if ((plataforma.y >= -20) and
                 (plataforma.y + plataforma.height <= self.janela.height)):
                 
@@ -94,7 +89,6 @@ class Jogador:
                         self.velocidade_vertical = 0
                         self.no_chao = True
                         self.jumping = False
-                        #mesma verificacao na classe dads plataformas:
                         if (self.qnte_pulos > 15):
                             self.x += plataforma.vx * self.dt
 
@@ -106,10 +100,7 @@ class Jogador:
                     if ((self.jumping) and (self.velocidade_vertical > 0)):
                         self.velocidade_vertical = 0
                     
-    #definicao do funcionamento do pulo:
     def pulo (self):
-        
-        #caso de haver pressionamento das teclas de pulo e o personagem nao estar pulando:
         if (((self.teclado.key_pressed("SPACE")) or (self.teclado.key_pressed("W"))) and (self.no_chao == True)
             and (self.jumping == False)):
             self.jumping = True
@@ -117,58 +108,41 @@ class Jogador:
             self.velocidade_vertical = -self.forca_pulo
             self.qnte_pulos += 1
 
-    #movimento horizontal do jogador:
     def mov (self):
-        
         self.velocidade_vertical += self.gravidade*self.dt
 
-        #por padrao é parado:
         self.agora = self.anim_parado
 
-        #movimento para a esquerda:
         if (self.teclado.key_pressed("A") or self.teclado.key_pressed("LEFT")):
             self.agora = self.anim_esquerda
             self.x -= self.velocidade_horizontal * self.dt
         
-        #movimento para a direita:
         if (self.teclado.key_pressed("D") or self.teclado.key_pressed("RIGHT")):
             self.agora = self.anim_direita
             self.x += self.velocidade_horizontal * self.dt
 
-        #verificando os "limites" horizontais da tela:
-            #lado esquerdo:
+        # Limites da tela
         if self.x < 0:
             self.x = 0
-            #lado direito:
         elif self.x + self.width > self.janela.width:
             self.x = self.janela.width - self.width
 
-        #pulando ou caindo
+        # Atualiza Y
         if (self.no_chao == False):
             self.y += (self.velocidade_vertical * self.dt)
     
-    #colocar o personagem na tela:
     def desenha (self, lista_plataformas):
-
-        #premissa:
         self.subindo = False
-        
-        #calculo de delta time usado em algumas funcoes
         self.dt = self.janela.delta_time()
         
-        #primeiro checamos se o personagem esta na plataforma:
         self.personagem_plataformas (lista_plataformas)
-
-        #agora verificamos se ele pulou:
         self.pulo()
-        #momento emm que o jogador está subindo e a câmera também tem que subir
+        
         if (self.velocidade_vertical < 0):
             self.subindo = True
 
-        #agora seu movimento horizontal:
         self.mov()
 
         self.agora.set_position (self.x, self.y)
         self.agora.update()
-
         self.agora.draw()
