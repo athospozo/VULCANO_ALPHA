@@ -8,6 +8,9 @@ class Jogador:
     #definicao de caracteristicas basicas
     def __init__ (self, janela, plataforma1):
 
+        #definindo sons:
+        self.jump = pygame.mixer.Sound("SONS/jump.wav")
+
         #definicooes basicas:
         self.teclado = Keyboard()
         self.janela = janela
@@ -43,7 +46,7 @@ class Jogador:
         self.y = plataforma1.y - plataforma1.height*2
 
         #fisica do movimento horizontal:
-        self.velocidade_horizontal = self.janela.width/5
+        self.velocidade_horizontal = self.janela.width/4
         self.no_chao = True
 
         #fisica do movimento vertical:
@@ -78,7 +81,7 @@ class Jogador:
         self.no_chao = False
         for plataforma in lista_plataformas:
             if ((plataforma.y >= -20) and
-                (plataforma.y + plataforma.height <= self.janela.height)):
+                (plataforma.y + plataforma.height <= self.janela.height + 20)):
                 
                 self.aux = self.colisao(plataforma)
 
@@ -107,8 +110,10 @@ class Jogador:
             self.no_chao = False
             self.velocidade_vertical = -self.forca_pulo
             self.qnte_pulos += 1
+            self.jump.play()
 
     def mov (self):
+
         self.velocidade_vertical += self.gravidade*self.dt
 
         self.agora = self.anim_parado

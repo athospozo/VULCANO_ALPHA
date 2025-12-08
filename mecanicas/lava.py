@@ -41,14 +41,14 @@ class lava:
         self.velocidade = 5
 
         if (self.espaco):
-            # Se jogador parado, lava sobe normal
-            if (jogador.subindo == False):
-                    self.y -= self.velocidade*self.janela.delta_time()
+            # Se jogador parado, lava sobe normal ate um limite maximo para ficar mais divertido
+            if (jogador.subindo == False and self.y > self.janela.height/2):
+                    self.y -= self.velocidade*0.8*self.janela.delta_time()
             
             # Se jogador pulando/subindo, lava sobe mais rápido para pressionar
             else:
                 if (self.y < self.janela.height - 10):
-                    self.y += self.velocidade*4*self.janela.delta_time()
+                    self.y += self.velocidade*5*self.janela.delta_time()
         
     def desenhar(self): 
         self.sprite_lava.set_position(self.x, self.y)

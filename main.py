@@ -17,6 +17,10 @@ janela_altura = 700
 janela = Window(janela_largura, janela_altura)
 janela.set_title('VULCANO')
 
+#definindo som:
+#sons:
+pygame.mixer.music.load("SONS/LavaLoop.wav")
+        
 # Carregamento das imagens de fundo (certifique-se que elas existem na pasta ARTES)
 gm1 = GameImage('ARTES/jogar1.png')
 menu_img = GameImage('ARTES/menu.png')
@@ -44,6 +48,7 @@ while True:
         PLAY, MENU, RANKING = gamemenu(janela, mouse, menu_img, PLAY, MENU, RANKING)
     
     elif PLAY:
+        pygame.mixer.music.play(-1)
         # Chama o loop do jogo e espera 4 valores de retorno (incluindo o tempo)
         PLAY, MENU, RANKING, tempo_jogo = loopjogo(janela, gm1, teclado, PLAY, MENU, RANKING)
         

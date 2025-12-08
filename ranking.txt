@@ -7,3 +7,7 @@ gg,8.12
 gg,14.26
 athos,3.96
 athos,23.27
+athos,53.23
+yago,2.01
+athos,139.93
+teste,1.61

@@ -13,6 +13,9 @@ from mecanicas.lava import lava
 from mecanicas.plataforma import *
 
 def loopjogo(janela, gm1, teclado, PLAY, MENU, RANKING):
+
+    morreu = pygame.mixer.Sound("SONS/lava.flac")
+
     # Inicia contagem de tempo
     inicio_tempo = time.time()
     tempo_final = 0
@@ -40,6 +43,8 @@ def loopjogo(janela, gm1, teclado, PLAY, MENU, RANKING):
         pe_jogador_na_tela_y = jogador.y + jogador.height
         
         if pe_jogador_na_tela_y > obstaculo.y:
+            pygame.mixer.music.fadeout(2000)
+            morreu.play()
             PLAY = False
             MENU = True
             RANKING = False
