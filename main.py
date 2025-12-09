@@ -46,7 +46,7 @@ while True:
 
     if MENU:
         PLAY, MENU, RANKING = gamemenu(janela, mouse, menu_img, PLAY, MENU, RANKING)
-    
+
     elif PLAY:
         if not pygame.mixer.music.get_busy():
             pygame.mixer.music.play(-1)

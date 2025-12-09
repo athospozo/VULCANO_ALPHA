@@ -16,9 +16,11 @@ def loopjogo(janela, gm1, teclado, PLAY, MENU, RANKING):
 
     morreu = pygame.mixer.Sound("SONS/lava.flac")
 
-    # Inicia contagem de tempo
-    inicio_tempo = time.time()
+    # --- ALTERAÇÃO 1: Inicialização do Timer ---
+    # Não pegamos o tempo agora. Apenas zeramos as variáveis.
+    inicio_tempo = 0
     tempo_final = 0
+    jogo_iniciou = False
     
     # Inicialização das Plataformas, Jogador e Obstáculo
     gerenciador_plat = Plataforma(janela)
@@ -34,12 +36,18 @@ def loopjogo(janela, gm1, teclado, PLAY, MENU, RANKING):
             # Retorna 0 no tempo pois saiu pelo ESC
             return PLAY, MENU, RANKING, 0
         
+        # --- ALTERAÇÃO 2: Verificar início do jogo ---
+        # Se o jogo ainda não iniciou (timer parado), esperamos o pulo
+        if not jogo_iniciou:
+            if teclado.key_pressed("SPACE") or teclado.key_pressed("W"):
+                jogo_iniciou = True
+                inicio_tempo = time.time()
+        
         # Lógica das Plataformas
         gerenciador_plat.criacao_plataformas()
         gerenciador_plat.remocao_plataformas(janela)
 
         # Lógica de Game Over
-        # Usamos a posição Y do jogador + altura para ver se encostou na lava
         pe_jogador_na_tela_y = jogador.y + jogador.height
         
         if pe_jogador_na_tela_y > obstaculo.y:
@@ -48,8 +56,13 @@ def loopjogo(janela, gm1, teclado, PLAY, MENU, RANKING):
             PLAY = False
             MENU = True
             RANKING = False
-            # Calcula tempo final
-            tempo_final = time.time() - inicio_tempo
+            
+            # --- ALTERAÇÃO 3: Cálculo do tempo final ao morrer ---
+            if jogo_iniciou:
+                tempo_final = time.time() - inicio_tempo
+            else:
+                tempo_final = 0 # Morreu sem nem começar (raro, mas evita bugs)
+                
             return PLAY, MENU, RANKING, tempo_final
         
         # Atualiza a lava e o Jogador
@@ -59,13 +72,17 @@ def loopjogo(janela, gm1, teclado, PLAY, MENU, RANKING):
         gm1.draw() 
 
         # Desenho dos objetos
-        # Passamos o jogador para o gerenciador desenhar as plataformas (scrolling)
         gerenciador_plat.desenhar_plataformas(jogador)
         jogador.desenha(gerenciador_plat.lista)
         obstaculo.desenhar()
 
         # --- HUD (CRONÔMETRO) ---
-        tempo_atual = time.time() - inicio_tempo
+        # --- ALTERAÇÃO 4: Exibição condicional do tempo ---
+        if jogo_iniciou:
+            tempo_atual = time.time() - inicio_tempo
+        else:
+            tempo_atual = 0.0
+
         texto_tempo = f"{tempo_atual:.1f}s"
 
         largura_box = 110
