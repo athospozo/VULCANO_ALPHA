@@ -12,22 +12,23 @@ from mecanicas.personagem import Jogador
 from mecanicas.lava import lava
 from mecanicas.plataforma import *
 
-def loopjogo(janela, gm1, teclado, PLAY, MENU, RANKING):
+def loopjogo(janela, gm1, lav, direita, esquerda, parado, teclado, PLAY, MENU, RANKING, pulo, morte):
 
-    morreu = pygame.mixer.Sound("SONS/lava.flac")
+    morreu = pygame.mixer.Sound(morte)
 
     # Inicia contagem de tempo
     inicio_tempo = time.time()
     tempo_final = 0
-    
+
     # Inicialização das Plataformas, Jogador e Obstáculo
     gerenciador_plat = Plataforma(janela)
-    jogador = Jogador(janela, gerenciador_plat.lista[0])
-    obstaculo = lava(janela)
+    jogador = Jogador(janela, direita, esquerda, parado, pulo, gerenciador_plat.lista[0])
+    obstaculo = lava(janela, lav)
 
     while PLAY:
 
         if teclado.key_pressed("ESC"):
+            pygame.mixer.music.fadeout(2000)
             PLAY = False
             MENU = True
             RANKING = False

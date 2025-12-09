@@ -2,6 +2,17 @@ import random
 import pygame
 from PPlay.sprite import Sprite
 from PPlay.keyboard import *
+import os
+import sys
+
+#Funcao para o executavel
+def resolver_caminho(arquivo):
+    try:
+        base_path = sys._MEIPASS
+    except AttributeError:
+        base_path = os.path.abspath(".")
+    
+    return os.path.join(base_path, arquivo)
 
 class Plataforma:
     #definindo caracteristicas iniciais:
@@ -11,16 +22,17 @@ class Plataforma:
         self.janela = janela
         self.teclado = Keyboard()
         self.lista = []
-        self.listay = []
+        self.poderes = []
 
         #definindo as medidas dos sprites
         self.width = self.janela.width//5
         self.height = self.janela.height//20
 
         #criando uma plataforma inicial:
-        primeira = Sprite("ARTES/plataforma1.png")
+        primeira = Sprite(resolver_caminho("ARTES/plataforma1.png"))
         primeira.x = self.janela.width/2 - self.width/2
         primeira.y = self.janela.height - self.janela.height/4
+        primeira.poder = False
 
         #redefinindo o tamanho do sprite:
         try:
@@ -39,6 +51,29 @@ class Plataforma:
 
         #para inicializar o jogo
         self.apertou_espaco = False
+
+        #definindo quando as plataformas tem poder nelas:
+        self.contagem = 1
+
+    #aqui vamos colocar o poder naa plataforma:
+    def adiciona_poder (self, plataforma):
+
+        #vamos gerar o sprite do poder:
+        poder = Sprite(resolver_caminho("ARTES/coin.png"))
+        poder.width = self.width/3
+        poder.height = self.height*2
+
+        #redefinindo o tamanho do sprite:
+        try:
+            poder.image = pygame.transform.scale(poder.image, (int(self.width/3), int(self.height*2)))
+        except Exception as e:
+            print(f"Erro ao redimensionar plataforma: {e}")
+    
+        #vamos definir as posicoes:
+        poder.x = plataforma.x + plataforma.width/2 - poder.width/2
+        poder.y = plataforma.y - poder.height*3
+
+        return poder
 
     #funcao que vai auxiliar numa melhor criacao de plataformas
     def escolhe_x(self):
@@ -85,10 +120,16 @@ class Plataforma:
     def criacao_plataformas (self):
         i = len(self.lista) - 1
         while ((i+1 < 15)):
+
+            #vamos iterar nossa contagem a cada vez que uma plataforma é adicionada:
+            self.contagem += 1
+            
             x = self.escolhe_x()
             y = self.escolhe_y()
             
-            nova_plataforma = Sprite(random.choice(["ARTES/plataforma1.png", "ARTES/plataforma2.png", "ARTES/plataforma3.png"]))
+            nova_plataforma = Sprite(random.choice([resolver_caminho("ARTES/plataforma1.png"),
+                                                    resolver_caminho("ARTES/plataforma2.png"),
+                                                     resolver_caminho("ARTES/plataforma3.png")]))
 
             try:
                 nova_plataforma.image = pygame.transform.scale(nova_plataforma.image, (int(self.width), int(self.height)))
@@ -97,6 +138,13 @@ class Plataforma:
 
             nova_plataforma.x = x
             nova_plataforma.y = y 
+
+            #vamos adicionar o poder:
+            nova_plataforma.poder = False
+
+            if (self.contagem % 15 == 0):
+                nova_plataforma.poder = True
+                nova_plataforma.moedinha = self.adiciona_poder(nova_plataforma)
 
             direcao = random.choice([-1, 1])
             nova_plataforma.vx = self.velocidade_base * direcao
@@ -120,6 +168,7 @@ class Plataforma:
                 plataforma.vx = -plataforma.vx
     
     def desenhar_plataformas (self, personagem):
+
         if (self.teclado.key_pressed("SPACE") or self.teclado.key_pressed("W")):
             self.apertou_espaco = True
 
@@ -130,12 +179,21 @@ class Plataforma:
             # Mecanica de Scrolling: se o personagem sobe, a plataforma desce
             if (personagem.subindo):
                 plataforma.y = plataforma.y + personagem.gravidade/7*self.janela.delta_time()
+
                 if (personagem.y < self.janela.height/4):
                     plataforma.y = plataforma.y + personagem.gravidade/14*self.janela.delta_time()
-            
+
             # Scrolling constante inicial
             if (self.apertou_espaco):
                 plataforma.y += 20/2*self.janela.delta_time()
-
+        
             plataforma.set_position(plataforma.x, plataforma.y)
             plataforma.draw()
+
+            if plataforma.poder: 
+                # Atualiza a posição da moeda para acompanhar a plataforma
+                plataforma.moedinha.y = plataforma.y - plataforma.moedinha.height * 1.5
+                
+                # Desenha a moeda
+                plataforma.moedinha.set_position(plataforma.moedinha.x, plataforma.moedinha.y)
+                plataforma.moedinha.draw()

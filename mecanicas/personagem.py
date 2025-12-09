@@ -2,14 +2,15 @@ from PPlay.animation import *
 from PPlay.keyboard import *
 from PPlay.window import *
 import pygame
+import random
 
 class Jogador:
 
     #definicao de caracteristicas basicas
-    def __init__ (self, janela, plataforma1):
+    def __init__ (self, janela, direita, esquerdo, parado, pulo, plataforma1):
 
         #definindo sons:
-        self.jump = pygame.mixer.Sound("SONS/jump.wav")
+        self.jump = pygame.mixer.Sound(pulo)
 
         #definicooes basicas:
         self.teclado = Keyboard()
@@ -17,9 +18,9 @@ class Jogador:
         self.dt = 0
 
         #primeiro a geracao de personagem:
-        self.anim_parado = Animation("ARTES/parado.png", 2)
-        self.anim_esquerda = Animation ("ARTES/esquerda.png", 4)
-        self.anim_direita = Animation ("ARTES/direita.png", 4)
+        self.anim_parado = Animation(parado, 2)
+        self.anim_esquerda = Animation (esquerdo, 4)
+        self.anim_direita = Animation (direita, 4)
 
         #agora definimos as medidas dos sprites:
         self.width = self.janela.width/25
@@ -59,6 +60,14 @@ class Jogador:
         self.subindo = False
         self.qnte_pulos = 0
 
+        #definindo se o jogador tem poder ou nao:
+        self.tipo_poder = None
+        self.guarda_pulo = 1
+    
+    def escolhe_poder (self):
+        #self.tipo_poder = random.choice(["LAVA", "PULO"])
+        self.tipo_poder = "PULO"
+    
     #definindo quando ha uma colisao de personagem com outro sprite:
     def colisao (self, possivel_colisao):
         #sobreposição no eixo x:
@@ -74,6 +83,7 @@ class Jogador:
             if ((self.y >= possivel_colisao.y + possivel_colisao.height/2) and
                 (self.y <= possivel_colisao.y + possivel_colisao.height)): 
                 return -1
+            
         return 0
             
     #definindo como o personagem interage com as plataformas:
@@ -83,6 +93,12 @@ class Jogador:
             if ((plataforma.y >= -20) and
                 (plataforma.y + plataforma.height <= self.janela.height + 20)):
                 
+                #vamos verificar se fez colisao com a moedinha de poder:
+                if (plataforma.poder):
+                    if (self.colisao(plataforma.moedinha) != 0):
+                        plataforma.poder = False
+                        self.escolhe_poder()
+        
                 self.aux = self.colisao(plataforma)
 
                 #verificamos se é colisao por cima

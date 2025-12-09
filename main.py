@@ -3,6 +3,8 @@ from PPlay.keyboard import *
 from PPlay.mouse import *
 from PPlay.window import *
 from PPlay.gameimage import *
+import os
+import sys
 
 from mecanicas.menu import gamemenu
 from mecanicas.loopjogo import loopjogo
@@ -12,19 +14,42 @@ pygame.init()
 mouse = Mouse()
 teclado = Keyboard()
 
+#Funcao para o executavel
+def resolver_caminho(arquivo):
+    try:
+        base_path = sys._MEIPASS
+    except AttributeError:
+        base_path = os.path.abspath(".")
+    
+    return os.path.join(base_path, arquivo)
+
+#Sprite lava:
+img_lava_path = resolver_caminho("ARTES/lava.png")
+
+#Sprite personagem:
+img_direita_path = resolver_caminho("ARTES/direita.png")
+img_esquerda_path = resolver_caminho("ARTES/esquerda.png")
+img_parado_path = resolver_caminho("ARTES/parado.png")
+
+#Som pulo:
+pulo = resolver_caminho("SONS/jump.wav")
+
+#Som morte:
+morte = ("SONS/lava.flac")
+
+
 janela_largura = 1000
 janela_altura = 700
 janela = Window(janela_largura, janela_altura)
 janela.set_title('VULCANO')
 
 #definindo som:
-#sons:
-pygame.mixer.music.load("SONS/LavaLoop.wav")
-        
+pygame.mixer.music.load(resolver_caminho("SONS/LavaLoop.wav"))
+
 # Carregamento das imagens de fundo (certifique-se que elas existem na pasta ARTES)
-gm1 = GameImage('ARTES/jogar1.png')
-menu_img = GameImage('ARTES/menu.png')
-ranking_img = GameImage('ARTES/menu.png') 
+gm1 = GameImage(resolver_caminho('ARTES/jogar1.png'))
+menu_img = GameImage(resolver_caminho('ARTES/menu.png'))
+ranking_img = GameImage(resolver_caminho('ARTES/menu.png')) 
 
 try:
     gm1.image = pygame.transform.scale(gm1.image, (janela_largura, janela_altura))
@@ -50,7 +75,10 @@ while True:
     elif PLAY:
         pygame.mixer.music.play(-1)
         # Chama o loop do jogo e espera 4 valores de retorno (incluindo o tempo)
-        PLAY, MENU, RANKING, tempo_jogo = loopjogo(janela, gm1, teclado, PLAY, MENU, RANKING)
+        PLAY, MENU, RANKING, tempo_jogo = loopjogo(janela, gm1, img_lava_path,
+                                                   img_direita_path, img_esquerda_path,
+                                                    img_parado_path, teclado, PLAY, MENU, RANKING,
+                                                    pulo, morte)
         
         # Se o tempo for maior que 0, significa que o jogador morreu
         if tempo_jogo > 0:

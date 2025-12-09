@@ -11,3 +11,13 @@ athos,53.23
 yago,2.01
 athos,139.93
 teste,1.61
+athos,34.14
+athos,72.16
+& C:/Users/athos/AppData/Local/Programs/Python/Python313/python.exe "c:/Users/athos/OneDrive/ï¿½rea de Trabalho/ATHOS/VULCANO/VULCANO_ALPHA/main.py",11.77
+athos,106.22
+athos,104.70
+yago,135.16
+athos,217.22
+yago,280.56
+athos,111.13
+& C:/Users/athos/AppData/Local/Programs/Python/Python313/python.exe "c:/Users/athos/OneDrive/Área de Trabalho/ATHOS/VULCANO/VULCANO_ALPHA/main.py",38.92

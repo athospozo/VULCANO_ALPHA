@@ -3,14 +3,14 @@ from PPlay.animation import *
 from PPlay.keyboard import *
 
 class lava:
-    def __init__(self, janela):
+    def __init__(self, janela, lava):
 
         #basico:
         self.janela = janela
         self.teclado = Keyboard()
 
         #gerando animacao da lava:
-        self.sprite_lava = Animation("ARTES/lava.png", 2)
+        self.sprite_lava = Animation(lava, 2)
 
         #definindo propriedades:
         self.width = self.janela.width
