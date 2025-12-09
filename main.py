@@ -9,6 +9,24 @@ import sys
 from mecanicas.menu import gamemenu
 from mecanicas.loopjogo import loopjogo
 from mecanicas.ranking import ranking, salvar_pontuacao 
+from mecanicas.teclado import tela_game_over
+
+# --- CONFIGURAÇÃO PARA EXECUTÁVEL ---
+def resolver_caminho(arquivo):
+    try:
+        # Se estiver rodando como .exe (PyInstaller)
+        base_path = sys._MEIPASS
+    except AttributeError:
+        # Se estiver rodando no Python normal
+        base_path = os.path.abspath(".")
+    
+    return os.path.join(base_path, arquivo)
+
+# TRUQUE DE MESTRE: Muda o diretório de trabalho para a pasta do executável.
+# Isso faz com que seus outros arquivos (personagem.py, lava.py) encontrem
+# as imagens "ARTES/..." sem precisar mudar o código deles.
+if hasattr(sys, '_MEIPASS'):
+    os.chdir(sys._MEIPASS)
 
 pygame.init()
 mouse = Mouse()
@@ -45,62 +63,54 @@ janela = Window(janela_largura, janela_altura)
 janela.set_title('VULCANO')
 
 #definindo som:
-pygame.mixer.music.load(resolver_caminho("SONS/LavaLoop.wav"))
-
+#sons:
+pygame.mixer.music.load("SONS/LavaLoop.wav")
+        
 # Carregamento das imagens de fundo (certifique-se que elas existem na pasta ARTES)
-gm1 = GameImage(resolver_caminho('ARTES/jogar1.png'))
-menu_img = GameImage(resolver_caminho('ARTES/menu.png'))
-ranking_img = GameImage(resolver_caminho('ARTES/menu.png')) 
+gm1 = GameImage('ARTES/jogar1.png')
+menu_img = GameImage('ARTES/menu.png')
+ranking_img = GameImage('ARTES/menu.png') 
 
 try:
     gm1.image = pygame.transform.scale(gm1.image, (janela_largura, janela_altura))
     menu_img.image = pygame.transform.scale(menu_img.image, (janela_largura, janela_altura))
     ranking_img.image = pygame.transform.scale(ranking_img.image, (janela_largura, janela_altura))
-except Exception as e:
-    print(f"Erro ao redimensionar imagens de fundo: {e}")
+except:
+    pass 
 
 MENU = True
 RANKING = False
 PLAY = False
-
-# Variável para armazenar o tempo retornado pelo jogo
 tempo_jogo = 0
 
 while True:
-    
     janela.set_background_color([0,0,0])
 
     if MENU:
         PLAY, MENU, RANKING = gamemenu(janela, mouse, menu_img, PLAY, MENU, RANKING)
-    
+
     elif PLAY:
         pygame.mixer.music.play(-1)
         # Chama o loop do jogo e espera 4 valores de retorno (incluindo o tempo)
         PLAY, MENU, RANKING, tempo_jogo = loopjogo(janela, gm1, img_lava_path,
                                                    img_direita_path, img_esquerda_path,
-                                                    img_parado_path, teclado, PLAY, MENU, RANKING,
-                                                    pulo, morte)
+                                                    img_parado_path, teclado,
+                                                     PLAY, MENU, RANKING, pulo, morte)
         
-        # Se o tempo for maior que 0, significa que o jogador morreu
         if tempo_jogo > 0:
-            print("\n" + "="*40)
-            print(f"FIM DE JOGO! Você sobreviveu: {tempo_jogo:.2f} segundos.")
-            # Pequeno delay para não bugar o input do nome
-            janela.delay(500)
+            pygame.mixer.music.stop()
             
-            # Nota: O input aqui é no terminal. Para input na janela seria necessário outra lógica.
-            nome = input("Digite seu nome para o Ranking: ")
+            # Chama a tela de digitar nome (Sua lógica gráfica)
+            nome_jogador = tela_game_over(janela, tempo_jogo)
             
-            if nome.strip() != "":
-                salvar_pontuacao(nome, tempo_jogo)
-                print("Pontuação Salva com sucesso!")
-            else:
-                print("Nome vazio, pontuação não salva.")
-                
-            print("="*40 + "\n")
+            # Salva pontuação
+            if nome_jogador.strip() != "":
+                salvar_pontuacao(nome_jogador, tempo_jogo)
             
-            # Zera o tempo para não pedir de novo
             tempo_jogo = 0
+            PLAY = False
+            MENU = False
+            RANKING = True 
     
     elif RANKING:
         PLAY, MENU, RANKING = ranking(janela, teclado, ranking_img, PLAY, MENU, RANKING)

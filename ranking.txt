@@ -11,6 +11,7 @@ athos,53.23
 yago,2.01
 athos,139.93
 teste,1.61
+<<<<<<< HEAD
 athos,34.14
 athos,72.16
 & C:/Users/athos/AppData/Local/Programs/Python/Python313/python.exe "c:/Users/athos/OneDrive/ï¿½rea de Trabalho/ATHOS/VULCANO/VULCANO_ALPHA/main.py",11.77
@@ -21,3 +22,14 @@ athos,217.22
 yago,280.56
 athos,111.13
 & C:/Users/athos/AppData/Local/Programs/Python/Python313/python.exe "c:/Users/athos/OneDrive/Área de Trabalho/ATHOS/VULCANO/VULCANO_ALPHA/main.py",38.92
+=======
+gb,1.28
+davi,1.04
+davi,211.93
+fa,1.17
+athospozo,26.05
+dadada,0.91
+ss,1.12
+ d,17.07
+>>>>>>> c7f0c09e67d53b371a27076d549a7a8d9fb7b20d
+athos,6.70
