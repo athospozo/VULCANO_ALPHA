@@ -94,11 +94,11 @@ class Jogador:
             if ((plataforma.y >= -20) and
                 (plataforma.y + plataforma.height <= self.janela.height + 20)):
                 
-                #vamos verificar se fez colisao com a moedinha de poder:
+                '''#vamos verificar se fez colisao com a moedinha de poder:
                 if (plataforma.poder):
                     if (self.colisao(plataforma.moedinha) != 0):
                         plataforma.poder = False
-                        self.escolhe_poder()
+                        self.escolhe_poder()'''
         
                 self.aux = self.colisao(plataforma)
 
@@ -132,14 +132,14 @@ class Jogador:
             self.espaco_apertado = True
             self.jump.play()
     
-    def pulo_duplo (self):
+    '''def pulo_duplo (self):
 
         if (((self.teclado.key_pressed("SPACE")) or (self.teclado.key_pressed("W"))) 
             and (self.tipo_poder == "PULO") and (self.espaco_apertado) and (self.jumping)):
             self.espaco_apertado = False
             self.velocidade_vertical = -self.forca_pulo
             self.guarda_pulo += 1
-            self.jump.play()
+            self.jump.play()'''
 
 
     def mov (self):

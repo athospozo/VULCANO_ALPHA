@@ -55,7 +55,7 @@ class Plataforma:
         #definindo quando as plataformas tem poder nelas:
         self.contagem = 1
 
-    #aqui vamos colocar o poder naa plataforma:
+    '''#aqui vamos colocar o poder naa plataforma:
     def adiciona_poder (self, plataforma):
 
         #vamos gerar o sprite do poder:
@@ -73,7 +73,7 @@ class Plataforma:
         poder.x = plataforma.x + plataforma.width/2 - poder.width/2
         poder.y = plataforma.y - poder.height*3
 
-        return poder
+        return poder'''
 
     #funcao que vai auxiliar numa melhor criacao de plataformas
     def escolhe_x(self):
@@ -121,8 +121,8 @@ class Plataforma:
         i = len(self.lista) - 1
         while ((i+1 < 15)):
 
-            #vamos iterar nossa contagem a cada vez que uma plataforma é adicionada:
-            self.contagem += 1
+            '''#vamos iterar nossa contagem a cada vez que uma plataforma é adicionada:
+            self.contagem += 1'''
             
             x = self.escolhe_x()
             y = self.escolhe_y()
@@ -139,12 +139,12 @@ class Plataforma:
             nova_plataforma.x = x
             nova_plataforma.y = y 
 
-            #vamos adicionar o poder:
-            nova_plataforma.poder = False
+            '''#vamos adicionar o poder:
+            nova_plataforma.poder = False'''
 
-            if (self.contagem % 15 == 0):
+            '''if (self.contagem % 15 == 0):
                 nova_plataforma.poder = True
-                nova_plataforma.moedinha = self.adiciona_poder(nova_plataforma)
+                nova_plataforma.moedinha = self.adiciona_poder(nova_plataforma)'''
 
             direcao = random.choice([-1, 1])
             nova_plataforma.vx = self.velocidade_base * direcao
@@ -190,10 +190,10 @@ class Plataforma:
             plataforma.set_position(plataforma.x, plataforma.y)
             plataforma.draw()
 
-            if plataforma.poder: 
+            '''if plataforma.poder: 
                 # Atualiza a posição da moeda para acompanhar a plataforma
                 plataforma.moedinha.y = plataforma.y - plataforma.moedinha.height * 1.5
                 
                 # Desenha a moeda
                 plataforma.moedinha.set_position(plataforma.moedinha.x, plataforma.moedinha.y)
-                plataforma.moedinha.draw()
+                plataforma.moedinha.draw()'''
