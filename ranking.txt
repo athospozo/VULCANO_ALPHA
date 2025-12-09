@@ -11,3 +11,8 @@ athos,53.23
 yago,2.01
 athos,139.93
 teste,1.61
+gb,1.28
+davi,1.04
+davi,211.93
+fa,1.17
+athospozo,26.05
