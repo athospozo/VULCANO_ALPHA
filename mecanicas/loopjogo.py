@@ -8,21 +8,27 @@ from PPlay.window import *
 from PPlay.gameobject import *
 from PPlay.gameimage import *
 
+# Seus imports originais
 from mecanicas.personagem import Jogador
 from mecanicas.lava import lava
 from mecanicas.plataforma import *
 
 def loopjogo(janela, gm1, teclado, PLAY, MENU, RANKING):
 
-    morreu = pygame.mixer.Sound("SONS/lava.flac")
+    # Tenta carregar o som, se falhar (por exemplo, caminho errado no exe), não crasha
+    try:
+        morreu = pygame.mixer.Sound("SONS/lava.flac")
+    except:
+        print("Erro ao carregar som de morte")
+        morreu = None
 
-    # --- ALTERAÇÃO 1: Inicialização do Timer ---
-    # Não pegamos o tempo agora. Apenas zeramos as variáveis.
+    # --- Inicialização do Timer (Sua lógica de travar o tempo) ---
     inicio_tempo = 0
     tempo_final = 0
     jogo_iniciou = False
     
-    # Inicialização das Plataformas, Jogador e Obstáculo
+    # Inicialização das Classes
+    # Elas funcionarão no executável porque o main.py mudou o diretório padrão (chdir)
     gerenciador_plat = Plataforma(janela)
     jogador = Jogador(janela, gerenciador_plat.lista[0])
     obstaculo = lava(janela)
@@ -33,11 +39,9 @@ def loopjogo(janela, gm1, teclado, PLAY, MENU, RANKING):
             PLAY = False
             MENU = True
             RANKING = False
-            # Retorna 0 no tempo pois saiu pelo ESC
             return PLAY, MENU, RANKING, 0
         
-        # --- ALTERAÇÃO 2: Verificar início do jogo ---
-        # Se o jogo ainda não iniciou (timer parado), esperamos o pulo
+        # --- Lógica de iniciar o timer apenas no pulo ---
         if not jogo_iniciou:
             if teclado.key_pressed("SPACE") or teclado.key_pressed("W"):
                 jogo_iniciou = True
@@ -52,16 +56,16 @@ def loopjogo(janela, gm1, teclado, PLAY, MENU, RANKING):
         
         if pe_jogador_na_tela_y > obstaculo.y:
             pygame.mixer.music.fadeout(2000)
-            morreu.play()
+            if morreu:
+                morreu.play()
             PLAY = False
             MENU = True
             RANKING = False
             
-            # --- ALTERAÇÃO 3: Cálculo do tempo final ao morrer ---
             if jogo_iniciou:
                 tempo_final = time.time() - inicio_tempo
             else:
-                tempo_final = 0 # Morreu sem nem começar (raro, mas evita bugs)
+                tempo_final = 0 
                 
             return PLAY, MENU, RANKING, tempo_final
         
@@ -77,7 +81,6 @@ def loopjogo(janela, gm1, teclado, PLAY, MENU, RANKING):
         obstaculo.desenhar()
 
         # --- HUD (CRONÔMETRO) ---
-        # --- ALTERAÇÃO 4: Exibição condicional do tempo ---
         if jogo_iniciou:
             tempo_atual = time.time() - inicio_tempo
         else:

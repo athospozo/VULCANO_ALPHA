@@ -18,3 +18,4 @@ fa,1.17
 athospozo,26.05
 dadada,0.91
 ss,1.12
+ d,17.07
