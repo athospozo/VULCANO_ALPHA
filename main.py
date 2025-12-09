@@ -16,6 +16,7 @@ teclado = Keyboard()
 
 #Funcao para o executavel
 def resolver_caminho(arquivo):
+    
     try:
         base_path = sys._MEIPASS
     except AttributeError:

@@ -63,6 +63,7 @@ class Jogador:
         #definindo se o jogador tem poder ou nao:
         self.tipo_poder = None
         self.guarda_pulo = 1
+        self.espaco_apertado = False
     
     def escolhe_poder (self):
         #self.tipo_poder = random.choice(["LAVA", "PULO"])
@@ -120,13 +121,26 @@ class Jogador:
                         self.velocidade_vertical = 0
                     
     def pulo (self):
+
         if (((self.teclado.key_pressed("SPACE")) or (self.teclado.key_pressed("W"))) and (self.no_chao == True)
             and (self.jumping == False)):
             self.jumping = True
             self.no_chao = False
             self.velocidade_vertical = -self.forca_pulo
             self.qnte_pulos += 1
+            self.guarda_pulo += 1
+            self.espaco_apertado = True
             self.jump.play()
+    
+    def pulo_duplo (self):
+
+        if (((self.teclado.key_pressed("SPACE")) or (self.teclado.key_pressed("W"))) 
+            and (self.tipo_poder == "PULO") and (self.espaco_apertado) and (self.jumping)):
+            self.espaco_apertado = False
+            self.velocidade_vertical = -self.forca_pulo
+            self.guarda_pulo += 1
+            self.jump.play()
+
 
     def mov (self):
 
@@ -158,6 +172,8 @@ class Jogador:
         
         self.personagem_plataformas (lista_plataformas)
         self.pulo()
+        if (self.tipo_poder == "PULO"):
+            self.pulo_duplo()
         
         if (self.velocidade_vertical < 0):
             self.subindo = True
