@@ -66,7 +66,11 @@ def loopjogo(janela, gm1, lav, direita, esquerda, parado, teclado, PLAY, MENU, R
         obstaculo.desenhar()
 
         # --- HUD (CRONÔMETRO) ---
-        tempo_atual = time.time() - inicio_tempo
+        if (gerenciador_plat.apertou_espaco):
+            tempo_atual = time.time() - inicio_tempo
+        else:
+            tempo_atual = 0.0
+            
         texto_tempo = f"{tempo_atual:.1f}s"
 
         largura_box = 110
